@@ -1,0 +1,12 @@
+.fondo{
+    background-color: green;
+    color:white;
+}
+
+.banner2{
+    background-image: url("https://firebasestorage.googleapis.com/v0/b/tiendadonchucho-2c4fb.appspot.com/o/verdurillas.avif?alt=media&token=ef2fe1df-daa3-451c-b336-817b8dbb7d85");
+    background-position: top center;
+    background-size: cover;
+    padding: 15%;
+    background-attachment: fixed;
+}
