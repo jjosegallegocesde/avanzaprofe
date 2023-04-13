@@ -1,7 +1,12 @@
 import './Tienda.css'
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { ServicioHabitacion } from '../services/tiendaServicio';
 
 export function Tienda(){
+
+    const[cargaServicio,setCargaServicio]=useState(true)
+    const[habitaciones,setHabitaciones]=useState(null)
 
     function cambiarFoto(evento){
         evento.preventDefault()
@@ -14,7 +19,6 @@ export function Tienda(){
     }
 
     let navigate = useNavigate();
-
     function activar(producto){
         navigate("/compras",{
             state:{
@@ -22,6 +26,68 @@ export function Tienda(){
             }
         });
     }
+
+
+    useEffect(function(){
+        ServicioHabitacion()
+            .then(function(datos){
+                setHabitaciones(datos)
+                setCargaServicio(false)   
+            })
+    },[])
+
+    if(cargaServicio){
+        return(
+            <>
+                <h1>CARGANDO....</h1>
+            </>
+        )
+        
+    }else{
+
+        return(
+            <>
+                <div class="row row-cols-1 row-cols-md-4 g-5 my-5 p-5">
+                    {
+                      habitaciones.map(function(producto){
+                        return(
+                            <div class="col zoom" onClick={function(){activar(producto)}}>
+                                <div class="card shadow h-100 p-2">
+                                    <h2 class="fw-bold text-center">{producto.nombre}</h2>
+                                    <img 
+                                        src={producto.foto} 
+                                        alt="foto" 
+                                        class="img-fluid sombra" 
+                                        onMouseOver={cambiarFoto} 
+                                        onMouseLeave={cambiarFoto2}
+                                    />
+                                    
+                                    <p class="text-center fw-bold">{producto.descripcion}</p>
+                                    <div class="row">
+                                        <div class="col-6 text-start">
+                                            <h3 class="text-success">${producto.precio} COP</h3>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <i class="bi bi-cart-fill fs-1 text-dark"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                </div>
+                            </div>
+                        )
+                      })  
+                    }
+                </div>
+            </>
+        )
+
+    }
+
+   
+
+    
 
     let productos=[
         {
@@ -87,42 +153,6 @@ export function Tienda(){
         }
     ]
 
-    return(
-        <>
-            <div class="row row-cols-1 row-cols-md-4 g-5 my-5 p-5">
-                {
-                  productos.map(function(producto){
-                    return(
-                        <div class="col zoom" onClick={function(){activar(producto)}}>
-                            <div class="card shadow h-100 p-2">
-                                <h2 class="fw-bold text-center">{producto.nombre}</h2>
-                                <img 
-                                    src={producto.foto} 
-                                    alt="foto" 
-                                    class="img-fluid sombra" 
-                                    onMouseOver={cambiarFoto} 
-                                    onMouseLeave={cambiarFoto2}
-                                />
-                                
-                                <p class="text-center fw-bold">{producto.descripcion}</p>
-                                <div class="row">
-                                    <div class="col-6 text-start">
-                                        <h3 class="text-success">${producto.precio} COP</h3>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <i class="bi bi-cart-fill fs-1 text-dark"></i>
-                                    </div>
-                                </div>
-                                
-                                
-                                
-                            </div>
-                        </div>
-                    )
-                  })  
-                }
-            </div>
-        </>
-    )
+   
 
 }

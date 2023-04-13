@@ -1,18 +1,23 @@
 import { useState,useEffect } from "react"
 
-
+import { ServicioReserva } from "../services/agregarproducto" 
 
 export function Administrador(){
 
     const[nombre,setNombre]=useState("")
+    const[cantidad,setCantidad]=useState("")
 
     function EnviarDatos(evento){
         evento.preventDefault()
         let datos={
-            "nombre":nombre
+            "nombre":nombre,
+            "cantidad":cantidad
         }
         console.log(datos)
-
+        ServicioReserva(datos)
+        .then(function(res){
+            console.log(res)
+        })
     }
 
     return(
@@ -57,7 +62,17 @@ export function Administrador(){
                                 <div class="col-6">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-123"></i></span>
-                                        <input type="text" class="form-control" placeholder="Cantidad"/>
+                                        <input 
+                                            type="text" 
+                                            class="form-control" 
+                                            placeholder="Cantidad"
+                                            id="cantidad"
+                                            onChange={(evento)=>{
+                                                setCantidad(evento.target.value) 
+                                            }}
+
+                                            
+                                        />
                                     </div>
                                 </div>
                                 <div class="col-6">
